@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         width:200,
-        height:40,
-        paddingBottom:30
+        height:50,
+        paddingBottom:20
     },
     textStyle: {
         width:190,
