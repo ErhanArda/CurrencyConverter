@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput } from 'react-native';
 import axios from 'axios';
-
 
 class Converter extends Component {
     constructor(props) {
@@ -16,15 +15,17 @@ class Converter extends Component {
             input: '',
             rates: []
         }
+
         this.getRates = this.getRates.bind(this);
     }
 
     getRates() {
         axios.get('http://data.fixer.io/api/latest?access_key=c54b6c4ff94ef2c682e58bfeb1ea0cf1&symbols=EUR,TRY,USD,CAD,JPY,BTC')
             .then(response => {
+                console.log(response);
                 const rates = response.data.rates;
                 this.setState({
-                    rates: rates
+                    rates
                 })
             })
     }
@@ -39,26 +40,25 @@ class Converter extends Component {
 
         return (
             <View style={converterWrapper}>
-                <TextInput placeholder='Enter EUR Value '
+                <TextInput placeholder='Enter EUR Value'
                     style={inputStyle}
-                    //keyboardType='numeric'
-                    onChange={(text) => {
-                        const i = parseFloat(text);
+                    keyboardType='numeric'
+                    onChangeText={(text) => {
+                        const i = parseFloat(text) || 0;
 
                         this.setState({
                             input: text,
-                            tr: (i * rates['TRY']),
-                            usd: (i * rates['USD']),
-                            cad: (i * rates['CAD']),
-                            jpy: (i * rates['JPY']),
-                            btc: (i * rates['BTC']),
-                            eur: (i * rates['EUR']),
+                            tr: (i * rates['TRY']).toFixed(3),
+                            usd: (i * rates['USD']).toFixed(3),
+                            cad: (i * rates['CAD']).toFixed(3),
+                            jpy: (i * rates['JPY']).toFixed(3),
+                            btc: (i * rates['BTC']).toFixed(3),
+                            eur: (i * rates['EUR']).toFixed(3),
                         })
                     }}
-                    value={`${input}`}
-                       // value = {this.state.input}
-                    //value={`${input}`}
-                />
+                    //value = {input}
+
+                    value={`${input}`} />
 
                 <Text style={textStyle}>TRY: {tr} </Text>
                 <Text style={textStyle}>USD: {usd} </Text>
@@ -66,7 +66,6 @@ class Converter extends Component {
                 <Text style={textStyle}>JPY: {jpy} </Text>
                 <Text style={textStyle}>BTC: {btc} </Text>
                 <Text style={textStyle}>EUR: {eur} </Text>
-
             </View>
         )
     }
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
     converterWrapper: {
         paddingTop: 30,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
 
     },
     inputStyle: {
